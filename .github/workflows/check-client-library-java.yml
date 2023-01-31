@@ -7,8 +7,6 @@ on:
       - '!main'
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - client-libraries/java/**
 jobs:
   analize_backend:
     name: Java client library
@@ -43,4 +41,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -Pcodecov -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=peter-szrnka -Dsonar.projectKey=peter-szrnka_give-my-secret-client-lib-java
+        run: mvn -Pcodecov -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=peter-szrnka -Dsonar.projectKey=peter-szrnka_give-my-secret-client-java
