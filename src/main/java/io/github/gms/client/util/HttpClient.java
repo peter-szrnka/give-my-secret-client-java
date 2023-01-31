@@ -30,14 +30,10 @@ import io.github.gms.client.model.GiveMySecretClientConfig;
  */
 public class HttpClient {
 	
-	private static ObjectMapper objectMapper;
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();;
 	
 	static {
-		if (objectMapper == null) {
-			objectMapper = new ObjectMapper();
-		}
-
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+		OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 	}
 
 	private HttpClient() {
