@@ -1,5 +1,14 @@
 package io.github.gms.client.util;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.gms.client.model.GetSecretRequest;
+import io.github.gms.client.model.GiveMySecretClientConfig;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -8,19 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 import java.util.Scanner;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.github.gms.client.model.GetSecretRequest;
-import io.github.gms.client.model.GetSecretResponse;
-import io.github.gms.client.model.GiveMySecretClientConfig;
 
 /**
  * Connection manager class.
@@ -39,14 +37,14 @@ public class HttpClient {
 	private HttpClient() {
 	}
 	
-	public static GetSecretResponse getResponse(GiveMySecretClientConfig configuration, GetSecretRequest request) throws IOException, KeyManagementException, NoSuchAlgorithmException {
+	public static Map<String, String> getResponse(GiveMySecretClientConfig configuration, GetSecretRequest request) throws IOException, KeyManagementException, NoSuchAlgorithmException {
 		initHttpsConnection();
 		URLConnection connection = initURLConnection(configuration, request);
 		InputStream streamResponse = connection.getInputStream();
 
 		try (Scanner scanner = new Scanner(streamResponse)) {
 			String responseBody = scanner.useDelimiter("\\A").next();
-			return new ObjectMapper().readValue(responseBody, GetSecretResponse.class);
+			return new ObjectMapper().readValue(responseBody, Map.class);
 		} finally {
 			streamResponse.close();
 		}

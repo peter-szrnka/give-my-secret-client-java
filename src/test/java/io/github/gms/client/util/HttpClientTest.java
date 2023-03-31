@@ -1,17 +1,16 @@
 package io.github.gms.client.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-
 import io.github.gms.client.model.GetSecretRequest;
-import io.github.gms.client.model.GetSecretResponse;
 import io.github.gms.client.model.GiveMySecretClientConfig;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Unit test of {@link HttpClient}
@@ -38,8 +37,8 @@ class HttpClientTest {
 				.build();
 		GetSecretRequest request = GetSecretRequest.builder().withApiKey("api-key").withSecretId("secret1").build();
 
-		GetSecretResponse response = HttpClient.getResponse(configuration, request);
+		Map<String, String> response = HttpClient.getResponse(configuration, request);
 		assertNotNull(response);
-		assertEquals("my-value", response.getValue());
+		assertEquals("my-value", response.get("value"));
 	}
 }

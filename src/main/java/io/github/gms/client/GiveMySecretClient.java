@@ -1,13 +1,11 @@
 package io.github.gms.client;
 
+import io.github.gms.client.model.GetSecretRequest;
+
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-
-import io.github.gms.client.impl.GiveMySecretClientImpl;
-import io.github.gms.client.model.GetSecretRequest;
-import io.github.gms.client.model.GetSecretResponse;
-import io.github.gms.client.model.GiveMySecretClientConfig;
+import java.util.Map;
 
 /**
  * Client object for Give My Secret.
@@ -26,9 +24,5 @@ public interface GiveMySecretClient {
 	 * @throws KeyManagementException
 	 * @throws NoSuchAlgorithmException
 	 */
-	GetSecretResponse getSecret(GetSecretRequest request) throws IOException, KeyManagementException, NoSuchAlgorithmException;
-	
-	static GiveMySecretClient create(GiveMySecretClientConfig config) {
-		return new GiveMySecretClientImpl(config);
-	}
+	Map<String, String> getSecret(GetSecretRequest request) throws IOException, KeyManagementException, NoSuchAlgorithmException;
 }

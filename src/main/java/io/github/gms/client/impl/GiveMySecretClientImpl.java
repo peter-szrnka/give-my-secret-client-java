@@ -1,5 +1,11 @@
 package io.github.gms.client.impl;
 
+import io.github.gms.client.GiveMySecretClient;
+import io.github.gms.client.model.GetSecretRequest;
+import io.github.gms.client.model.GiveMySecretClientConfig;
+import io.github.gms.client.util.HttpClient;
+
+import javax.crypto.Cipher;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
@@ -9,14 +15,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javax.crypto.Cipher;
-
-import io.github.gms.client.GiveMySecretClient;
-import io.github.gms.client.model.GetSecretRequest;
-import io.github.gms.client.model.GetSecretResponse;
-import io.github.gms.client.model.GiveMySecretClientConfig;
-import io.github.gms.client.util.HttpClient;
+import static io.github.gms.client.util.Constants.MULTIPLE_CREDENTIAL;
+import static io.github.gms.client.util.Constants.SIMPLE_CREDENTIAL;
+import static io.github.gms.client.util.Constants.TYPE;
 
 /**
  * Default implementation for client.
@@ -26,46 +32,65 @@ import io.github.gms.client.util.HttpClient;
  */
 public class GiveMySecretClientImpl implements GiveMySecretClient {
 
-	private GiveMySecretClientConfig configuration;
+	private final GiveMySecretClientConfig configuration;
 
 	public GiveMySecretClientImpl(GiveMySecretClientConfig configuration) {
 		if (configuration == null) {
-			throw new IllegalArgumentException("Configration is mandatory!");
+			throw new IllegalArgumentException("Configuration is mandatory!");
 		}
 
+		validateConfiguration(configuration);
 		this.configuration = configuration;
 	}
 
 	@Override
-	public GetSecretResponse getSecret(GetSecretRequest request)
+	public Map<String, String> getSecret(GetSecretRequest request)
 			throws IOException, KeyManagementException, NoSuchAlgorithmException {
-		validateConfig(request);
-		GetSecretResponse response = HttpClient.getResponse(configuration, request);
-		
+		validateRequest(request);
+		Map<String, String> httpResponse = HttpClient.getResponse(configuration, request);
+		String type = httpResponse.getOrDefault(TYPE, SIMPLE_CREDENTIAL);
+
+		// Post filter results
+		httpResponse = httpResponse.entrySet().stream().filter(s -> !s.getKey().equals(TYPE))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
 		if (request.getKeystore() != null) {
-			return decryptWithKeystore(request, response);
+			return decryptWithKeystore(request, httpResponse, type);
 		}
 
-		return response;
+		return httpResponse;
 	}
 
-	private GetSecretResponse decryptWithKeystore(GetSecretRequest request, GetSecretResponse response) {
+	private Map<String, String> decryptWithKeystore(GetSecretRequest request, Map<String, String> response, String type) {
 		KeyStore ks;
 		try {
 			ks = loadKeystore(request);
-			
+
 			PrivateKey pk = (PrivateKey) ks.getKey(request.getKeystoreAlias(), request.getKeystoreAliasCredential().toCharArray());
 
 			Cipher decrypt = Cipher.getInstance(pk.getAlgorithm());
 			decrypt.init(Cipher.DECRYPT_MODE, pk);
-			byte[] decryptedMessage = decrypt.doFinal(Base64.getDecoder().decode(response.getValue().getBytes(StandardCharsets.UTF_8)));
-			
-			return GetSecretResponse.builder().withValue(new String(decryptedMessage, StandardCharsets.UTF_8)).build();
+			byte[] decryptedMessage = decrypt.doFinal(Base64.getDecoder().decode(response.getOrDefault("value", "")
+					.getBytes(StandardCharsets.UTF_8)));
+			String decryptedRawMessage = new String(decryptedMessage);
+
+			Map<String, String> responseMap = new HashMap<>();
+
+			if (type.equals(MULTIPLE_CREDENTIAL)) {
+				Stream.of(decryptedRawMessage.split(";")).forEach(item -> {
+					String[] elements = item.split(":");
+					responseMap.put(elements[0], elements[1]);
+				});
+			} else {
+				responseMap.put("value", decryptedRawMessage);
+			}
+
+			return responseMap;
 		} catch (Exception e) {
 			throw new RuntimeException("Message cannot be decrypted!", e);
 		}
 	}
-	
+
 	private static KeyStore loadKeystore(GetSecretRequest request) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		KeyStore keystore = KeyStore.getInstance(request.getKeystoreType().getType());
 		keystore.load(request.getKeystore(), request.getKeystoreCredential().toCharArray());
@@ -73,7 +98,13 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
 		return keystore;
 	}
 
-	private void validateConfig(GetSecretRequest request) {
+	private static void validateConfiguration(GiveMySecretClientConfig configuration) {
+		if (configuration.getUrl() == null) {
+			throw new IllegalArgumentException("Server URL is mandatory!");
+		}
+	}
+
+	private static void validateRequest(GetSecretRequest request) {
 		if (request.getApiKey() == null) {
 			throw new IllegalArgumentException("API key is mandatory!");
 		}

@@ -102,72 +102,36 @@ public class InputData {
 		return apiKey;
 	}
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
-	}
-
 	public String getSecretId() {
 		return secretId;
-	}
-
-	public void setSecretId(String secretId) {
-		this.secretId = secretId;
 	}
 
 	public boolean isKeystoreRequired() {
 		return keystoreRequired;
 	}
 
-	public void setKeystoreRequired(boolean keystoreRequired) {
-		this.keystoreRequired = keystoreRequired;
-	}
-
 	public KeystoreType getType() {
 		return type;
-	}
-
-	public void setType(KeystoreType type) {
-		this.type = type;
 	}
 
 	public String getKeystoreCredential() {
 		return keystoreCredential;
 	}
 
-	public void setKeystoreCredential(String keystoreCredential) {
-		this.keystoreCredential = keystoreCredential;
-	}
-
 	public String getKeystoreAlias() {
 		return keystoreAlias;
-	}
-
-	public void setKeystoreAlias(String keystoreAlias) {
-		this.keystoreAlias = keystoreAlias;
 	}
 
 	public String getKeystoreAliasCredential() {
 		return keystoreAliasCredential;
 	}
 
-	public void setKeystoreAliasCredential(String keystoreAliasCredential) {
-		this.keystoreAliasCredential = keystoreAliasCredential;
-	}
-
 	public String getExpectedMessage() {
 		return expectedMessage;
 	}
 
-	public void setExpectedMessage(String expectedMessage) {
-		this.expectedMessage = expectedMessage;
-	}
-
 	public String getValue() {
 		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 	@Override

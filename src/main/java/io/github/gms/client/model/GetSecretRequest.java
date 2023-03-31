@@ -1,8 +1,8 @@
 package io.github.gms.client.model;
 
-import java.io.InputStream;
-
 import io.github.gms.client.enums.KeystoreType;
+
+import java.io.InputStream;
 
 /**
  * @author Peter Szrnka
@@ -10,13 +10,13 @@ import io.github.gms.client.enums.KeystoreType;
  */
 public class GetSecretRequest {
 
-	private String apiKey;
-	private String secretId;
-	private InputStream keystore;
-	private KeystoreType keystoreType;
-	private String keystoreCredential;
-	private String keystoreAlias;
-	private String keystoreAliasCredential;
+	private final String apiKey;
+	private final String secretId;
+	private final InputStream keystore;
+	private final KeystoreType keystoreType;
+	private final String keystoreCredential;
+	private final String keystoreAlias;
+	private final String keystoreAliasCredential;
 
 	private GetSecretRequest(Builder builder) {
 		this.apiKey = builder.apiKey;
