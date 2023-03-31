@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 import static io.github.gms.client.util.Constants.MULTIPLE_CREDENTIAL;
 import static io.github.gms.client.util.Constants.SIMPLE_CREDENTIAL;
 import static io.github.gms.client.util.Constants.TYPE;
+import static io.github.gms.client.util.Constants.VALUE;
 
 /**
  * Default implementation for client.
@@ -70,7 +71,7 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
 
 			Cipher decrypt = Cipher.getInstance(pk.getAlgorithm());
 			decrypt.init(Cipher.DECRYPT_MODE, pk);
-			byte[] decryptedMessage = decrypt.doFinal(Base64.getDecoder().decode(response.getOrDefault("value", "")
+			byte[] decryptedMessage = decrypt.doFinal(Base64.getDecoder().decode(response.getOrDefault(VALUE, "")
 					.getBytes(StandardCharsets.UTF_8)));
 			String decryptedRawMessage = new String(decryptedMessage);
 
@@ -82,7 +83,7 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
 					responseMap.put(elements[0], elements[1]);
 				});
 			} else {
-				responseMap.put("value", decryptedRawMessage);
+				responseMap.put(VALUE, decryptedRawMessage);
 			}
 
 			return responseMap;

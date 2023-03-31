@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static io.github.gms.client.util.Constants.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -39,6 +40,6 @@ class HttpClientTest {
 
 		Map<String, String> response = HttpClient.getResponse(configuration, request);
 		assertNotNull(response);
-		assertEquals("my-value", response.get("value"));
+		assertEquals("my-value", response.get(VALUE));
 	}
 }
