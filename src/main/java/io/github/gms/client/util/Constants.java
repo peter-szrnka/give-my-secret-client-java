@@ -1,9 +1,11 @@
 package io.github.gms.client.util;
 
-public interface Constants {
+public final class Constants {
 
-    String SIMPLE_CREDENTIAL = "SIMPLE_CREDENTIAL";
-    String MULTIPLE_CREDENTIAL = "MULTIPLE_CREDENTIAL";
-    String TYPE = "type";
-    String VALUE = "value";
+    private Constants() {}
+
+    public static final String SIMPLE_CREDENTIAL = "SIMPLE_CREDENTIAL";
+    public static final String MULTIPLE_CREDENTIAL = "MULTIPLE_CREDENTIAL";
+    public static final String TYPE = "type";
+    public static final String VALUE = "value";
 }
