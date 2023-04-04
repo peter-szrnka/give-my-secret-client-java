@@ -12,11 +12,11 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-public class EncryptedExampleCall {
+public class EncryptedJksExampleCall {
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyManagementException {
         GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
-                .withUrl("http://localhost:8080")
+                .withUrl("https://localhost:8443")
                 .build();
 
         GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
@@ -25,10 +25,10 @@ public class EncryptedExampleCall {
                         .withKeystore(new FileInputStream(new File("src/test/resources/test.jks")))
                         .withKeystoreType(KeystoreType.JKS)
                         .withKeystoreCredential("test")
+                        .withKeystoreAliasCredential("test")
                         .withKeystoreAlias("test")
                         .withApiKey("<api_key>")
                         .withSecretId("<secret_id>")
-                        .withSecretId("s2")
                 .build());
 
         System.out.println("response = " + response.toString());

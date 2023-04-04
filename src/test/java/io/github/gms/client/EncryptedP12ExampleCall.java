@@ -12,7 +12,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-public class DecryptedExampleCall {
+public class EncryptedP12ExampleCall {
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyManagementException {
         GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
@@ -22,6 +22,11 @@ public class DecryptedExampleCall {
         GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
 
         Map<String, String> response = client.getSecret(GetSecretRequest.builder()
+                        .withKeystore(new FileInputStream(new File("src/test/resources/test.p12")))
+                        .withKeystoreType(KeystoreType.PKCS12)
+                        .withKeystoreCredential("test")
+                        .withKeystoreAliasCredential("test")
+                        .withKeystoreAlias("test")
                         .withApiKey("<api_key>")
                         .withSecretId("<secret_id>")
                 .build());

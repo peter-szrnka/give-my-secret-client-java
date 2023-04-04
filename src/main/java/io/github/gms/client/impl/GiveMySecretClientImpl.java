@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.github.gms.client.util.Constants.MULTIPLE_CREDENTIAL;
 import static io.github.gms.client.util.Constants.SIMPLE_CREDENTIAL;
 import static io.github.gms.client.util.Constants.TYPE;
 import static io.github.gms.client.util.Constants.VALUE;
@@ -71,25 +70,27 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
 
 			Cipher decrypt = Cipher.getInstance(pk.getAlgorithm());
 			decrypt.init(Cipher.DECRYPT_MODE, pk);
-			byte[] decryptedMessage = decrypt.doFinal(Base64.getDecoder().decode(response.getOrDefault(VALUE, "")
+			byte[] decryptedMessageBytes = decrypt.doFinal(Base64.getDecoder().decode(response.getOrDefault(VALUE, "")
 					.getBytes(StandardCharsets.UTF_8)));
-			String decryptedRawMessage = new String(decryptedMessage);
 
-			Map<String, String> responseMap = new HashMap<>();
-
-			if (type.equals(MULTIPLE_CREDENTIAL)) {
-				Stream.of(decryptedRawMessage.split(";")).forEach(item -> {
-					String[] elements = item.split(":");
-					responseMap.put(elements[0], elements[1]);
-				});
-			} else {
-				responseMap.put(VALUE, decryptedRawMessage);
-			}
-
-			return responseMap;
+			return buildResponseMap(type, new String(decryptedMessageBytes));
 		} catch (Exception e) {
 			throw new RuntimeException("Message cannot be decrypted!", e);
 		}
+	}
+
+	private static Map<String, String> buildResponseMap(String type, String decryptedRawMessage) {
+		if (type.equals(SIMPLE_CREDENTIAL)) {
+			return Map.of(VALUE, decryptedRawMessage);
+		}
+
+		Map<String, String> responseMap = new HashMap<>();
+		Stream.of(decryptedRawMessage.split(";")).forEach(item -> {
+			String[] elements = item.split(":");
+			responseMap.put(elements[0], elements[1]);
+		});
+
+		return responseMap;
 	}
 
 	private static KeyStore loadKeystore(GetSecretRequest request) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
