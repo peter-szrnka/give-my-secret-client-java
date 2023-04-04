@@ -36,14 +36,14 @@ import static org.mockito.Mockito.mockStatic;
 class GiveMySecretClientImplTest {
 
 	private static final String TEST_DECRYPTED_VALUE = "my-value";
-	private static final String TEST_P12_VALUE = "cWp12SWr4rnBbScCBDrmgM+MwzpN9SDtYjJqouMJ7MQba3zElnfS8xm052upF8mcjM06h2Afm+M2FUEA3Un9sspGSMzhhSXTLSwhOe1amdzuLuIcxvFEA+b4fI2FUESlpcEnmcNghlinFQwwGIy7eEKhw0q7HxIjW5y733lUL/0wMd1FFv40NojDzmqoDMl5byjn0VV3aE1pKddSAzxs1xn4O2spRL2QyK+ILt83vFesSlPiRjZtMta4/ERGUPlyZPBKJlxJMNPwGEdca/mj0f4IhfdR+CI2Mu4CPqV6ev/IGsoBXMBurBsuSpWDKN/zuldpwlYONqz0jcXWgINYNA";
+	private static final String TEST_P12_VALUE = "FI2jIqPs5aD/Bf0V1Kz093kGu07nZ/czvILHmxkE88jhHITItId/hMiRO+ZQ4WcSQtf3IQlbROr86tjbPeTXU7QGz55OvCcjGSPh4EfKfazrbk1MhKAvZM21/KQ+zaiB0wJxGYpWd5In2GTaLLfJPF49+yfe+ncTC/VwuXSuXEdTTuWV/xRJkHyjIZqrJqqXMu/u64zIwTRzNzsDpFTFcVYimLHfFON1CN9IbyzEgV+8+Cu0S9dEIH3ZQowh63kThVCzPGNWeJorpQ7b9jHQFBDc0j4E+3Bdc9JocYOg8I8d0urYBJIZ3FaZC3woAjhdC0GwdhkC0rn2xaWXRv/BCQ";
 	private static final String TEST_ENCRYPTED_VALUE = "fTFllqRl39VoaYwCdpDNP1CAHWdhFCLUSJf+OOJyRzc05x1PslQihY4NM67LTAocOga1iePFNps0F4VL//kuXQV+rpLPowu7rvoVZl90Gau3fnF2ck7C2CY1ScBW0nIFuuEe+eya1eAFbMYQrYFx2NyaWug6ARfJxOxgcNYAW3av3rMkKw2CsjgAg7OHrg2f6d4TzxYoUVrcmMu+dziKf+vWAkKRuS+rg4NKmCkFg8hj1haa7Or8SNr+iBgx2TBAOEpPhidS6W/Mu5kmS9q5tI8+TPF2MjnHsGGRvKzQZilFSwk3C34BmiDiqtvYeDTfYaQsavGXd9ggarR2sQhkMA";
 	private static final String TEST_MULTIPLE_ENCRYPTED_VALUE = "iVLBe8/VeA+Bw3jyxtqo0fRw3lSLYky/q+DiAQjuzqmGJxNDKY7c+/+Z++stxibDinAMRNAFDgG+XKOSFfgL6Vykja513hskoI18Ome9CVCCJjsFN4tjfEu7aomnShsQo+rF/QFiDPwd0Hy+JmvtLsCYhpANjFIIxYWYcKS1TG47SjgjL9jkY7u1TGfPIh/Zgjv5UhE1qHMVj8SK/ILYyxRJp/YrxXrUhyR0q5kbgzLwwyMErG68so0NZGAuAYEido/EP/JMExjdxkYdYPWVGb9YezDJ6fl9Z8fgm786vynDV/dvG0T/dSh1c6epS1y43C7izh647Yysc0AzMX6pBQ";
 	private InputStream jksKeystoreStream;
 	private InputStream p12KeystoreStream;
 
 	@BeforeEach
-	private void setup() {
+	public void setup() {
 		jksKeystoreStream = getClass().getClassLoader().getResourceAsStream("test.jks");
 		p12KeystoreStream = getClass().getClassLoader().getResourceAsStream("test.p12");
 	}
@@ -162,21 +162,26 @@ class GiveMySecretClientImplTest {
 				.withApiKey("apiKey")
 				.withKeystoreType(KeystoreType.PKCS12)
 				.withKeystore(p12KeystoreStream)
-				.withSecretId("secret1")
-				.withKeystoreAliasCredential("Test1234")
-				.withKeystoreCredential("Test1234")
+				.withSecretId("secret2")
+				.withKeystoreAliasCredential("test")
+				.withKeystoreCredential("test")
 				.withKeystoreAlias("test")
 				.build();
 
+		Map<String, String> mockMap = new HashMap<>();
+		mockMap.put(VALUE, TEST_P12_VALUE);
+		mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
+
 		MockedStatic<HttpClient> mockedConnectionUtils = mockStatic(HttpClient.class);
-		mockedConnectionUtils.when(() -> HttpClient.getResponse(config, request)).thenReturn(Map.of(VALUE, TEST_P12_VALUE));
+		mockedConnectionUtils.when(() -> HttpClient.getResponse(config, request)).thenReturn(mockMap);
 
 		// act
 		GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
 
 		Map<String, String> response = client.getSecret(request);
 		assertNotNull(response);
-		assertEquals("my-value", response.get(VALUE));
+		assertEquals("peter", response.get("username"));
+		assertEquals("asdf1234", response.get("password"));
 
 		mockedConnectionUtils.close();
 	}
