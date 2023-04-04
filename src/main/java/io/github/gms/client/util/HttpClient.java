@@ -28,7 +28,7 @@ import java.util.Scanner;
  */
 public class HttpClient {
 	
-	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();;
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	
 	static {
 		OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
@@ -44,7 +44,7 @@ public class HttpClient {
 
 		try (Scanner scanner = new Scanner(streamResponse)) {
 			String responseBody = scanner.useDelimiter("\\A").next();
-			return new ObjectMapper().readValue(responseBody, Map.class);
+			return OBJECT_MAPPER.readValue(responseBody, Map.class);
 		} finally {
 			streamResponse.close();
 		}
