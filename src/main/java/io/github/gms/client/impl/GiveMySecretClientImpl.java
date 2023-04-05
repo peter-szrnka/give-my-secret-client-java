@@ -47,21 +47,26 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
 	public Map<String, String> getSecret(GetSecretRequest request)
 			throws IOException, KeyManagementException, NoSuchAlgorithmException {
 		validateRequest(request);
+
 		Map<String, String> httpResponse = HttpClient.getResponse(configuration, request);
-		String type = httpResponse.getOrDefault(TYPE, SIMPLE_CREDENTIAL);
+		// Type will be presented only if the values are encrypted
+		// In this case we have to return the response what we received
+		String type = httpResponse.get(TYPE);
 
-		// Post filter results
-		httpResponse = httpResponse.entrySet().stream().filter(s -> !s.getKey().equals(TYPE))
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-		if (request.getKeystore() != null) {
-			return decryptWithKeystore(request, httpResponse, type);
+		if (type == null) {
+			return httpResponse;
 		}
 
-		return httpResponse;
+		// Pre filter results before decryption
+		httpResponse = httpResponse.entrySet().stream().filter(s -> !s.getKey().equals(TYPE))
+				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue() != null ? entry.getValue() : ""));
+
+		return decryptWithKeystore(request, httpResponse, type);
 	}
 
 	private Map<String, String> decryptWithKeystore(GetSecretRequest request, Map<String, String> response, String type) {
+		validateKeystore(request);
+
 		KeyStore ks;
 		try {
 			ks = loadKeystore(request);
@@ -114,8 +119,10 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
 		if (request.getSecretId() == null) {
 			throw new IllegalArgumentException("Secret Id is mandatory!");
 		}
+	}
 
-		if (request.getKeystore() != null && isKeystoreConfigNotValid(request)) {
+	private static void validateKeystore(GetSecretRequest request) {
+		if (request.getKeystore() == null || isKeystoreConfigNotValid(request)) {
 			throw new IllegalArgumentException(
 					"Invalid configuration: All keystore parameter must be set if keystore stream defined!");
 		}

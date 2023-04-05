@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -150,9 +151,10 @@ class GiveMySecretClientImplTest {
 		}
 	}
 
-	@Test
 	@SneakyThrows
-	void shouldTestWithP12() {
+	@ParameterizedTest
+	@ValueSource(booleans = { true, false })
+	void shouldTestWithP12(boolean returnDecrypted) {
 		// arrange
 		GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
 				.withUrl("http://localhost:8080")
@@ -169,8 +171,13 @@ class GiveMySecretClientImplTest {
 				.build();
 
 		Map<String, String> mockMap = new HashMap<>();
-		mockMap.put(VALUE, TEST_P12_VALUE);
-		mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
+		if (returnDecrypted) {
+			mockMap.put("username", "peter");
+			mockMap.put("password", "asdf1234");
+		} else {
+			mockMap.put(VALUE, TEST_P12_VALUE);
+			mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
+		}
 
 		MockedStatic<HttpClient> mockedConnectionUtils = mockStatic(HttpClient.class);
 		mockedConnectionUtils.when(() -> HttpClient.getResponse(config, request)).thenReturn(mockMap);
