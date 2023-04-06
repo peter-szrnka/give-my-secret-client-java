@@ -8,16 +8,18 @@ package io.github.gms.client.model;
  */
 public class GiveMySecretClientConfig {
 
-	private String url;
-	private int defaultConnectionTimeout = 30000;
-	private int defaultReadTimeout = 30000;
-	
-	public GiveMySecretClientConfig() {}
+	private final String url;
+	private final int defaultConnectionTimeout;
+	private final int defaultReadTimeout;
+	private final boolean disableSslVerification;
+	private final int maxRetry;
 
 	private GiveMySecretClientConfig(Builder builder) {
 		this.url = builder.url;
 		this.defaultConnectionTimeout = builder.defaultConnectionTimeout;
 		this.defaultReadTimeout = builder.defaultReadTimeout;
+		this.disableSslVerification = builder.disableSslVerification;
+		this.maxRetry = builder.maxRetry;
 	}
 
 	public String getUrl() {
@@ -32,6 +34,14 @@ public class GiveMySecretClientConfig {
 		return defaultReadTimeout;
 	}
 
+	public boolean isDisableSslVerification() {
+		return disableSslVerification;
+	}
+
+	public int getMaxRetry() {
+		return maxRetry;
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -40,12 +50,19 @@ public class GiveMySecretClientConfig {
 		private String url;
 		private int defaultConnectionTimeout = 30000;
 		private int defaultReadTimeout = 30000;
+		private boolean disableSslVerification;
+		private int maxRetry = 3;
 
 		private Builder() {
 		}
 
 		public Builder withUrl(String url) {
 			this.url = url;
+			return this;
+		}
+
+		public Builder withDisableSslVerification(boolean disableSslVerification) {
+			this.disableSslVerification = disableSslVerification;
 			return this;
 		}
 
@@ -61,6 +78,11 @@ public class GiveMySecretClientConfig {
 
 		public GiveMySecretClientConfig build() {
 			return new GiveMySecretClientConfig(this);
+		}
+
+		public Builder withMaxRetry(int maxRetry) {
+			this.maxRetry = maxRetry;
+			return this;
 		}
 	}
 }

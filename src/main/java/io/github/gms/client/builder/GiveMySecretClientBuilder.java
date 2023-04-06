@@ -10,9 +10,9 @@ import io.github.gms.client.model.GiveMySecretClientConfig;
  * @author Peter Szrnka
  * @since 1.0.0
  */
-public final class GiveMySecretClientBuilder {
+public interface GiveMySecretClientBuilder {
 
-    public static GiveMySecretClient create(GiveMySecretClientConfig config) {
+    static GiveMySecretClient create(GiveMySecretClientConfig config) {
         return new GiveMySecretClientImpl(config);
     }
 }

@@ -7,14 +7,11 @@ import io.github.gms.client.model.GiveMySecretClientConfig;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 public class EncryptedJksExampleCall {
 
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+    public static void main(String[] args) throws Exception {
         GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
                 .withUrl("https://localhost:8443")
                 .build();
