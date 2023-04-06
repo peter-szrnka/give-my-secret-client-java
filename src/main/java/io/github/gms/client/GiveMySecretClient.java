@@ -2,9 +2,6 @@ package io.github.gms.client;
 
 import io.github.gms.client.model.GetSecretRequest;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 /**
@@ -20,9 +17,7 @@ public interface GiveMySecretClient {
 	 * @param request
 	 * @return GetSecretResponse Response object
 	 * 
-	 * @throws IOException
-	 * @throws KeyManagementException
-	 * @throws NoSuchAlgorithmException
+	 * @throws Exception
 	 */
-	Map<String, String> getSecret(GetSecretRequest request) throws IOException, KeyManagementException, NoSuchAlgorithmException;
+	Map<String, String> getSecret(GetSecretRequest request) throws Exception;
 }

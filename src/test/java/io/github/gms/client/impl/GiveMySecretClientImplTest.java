@@ -5,7 +5,7 @@ import io.github.gms.client.builder.GiveMySecretClientBuilder;
 import io.github.gms.client.enums.KeystoreType;
 import io.github.gms.client.model.GetSecretRequest;
 import io.github.gms.client.model.GiveMySecretClientConfig;
-import io.github.gms.client.util.HttpClient;
+import io.github.gms.client.util.ApiHttpClient;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,11 +86,11 @@ class GiveMySecretClientImplTest {
 				.withKeystoreAlias("test")
 				.build();
 
-		MockedStatic<HttpClient> mockedConnectionUtils = mockStatic(HttpClient.class);
+		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
 		Map<String, String> mockMap = new HashMap<>();
 		mockMap.put(VALUE, TEST_MULTIPLE_ENCRYPTED_VALUE);
 		mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
-		mockedConnectionUtils.when(() -> HttpClient.getResponse(config, request)).thenReturn(mockMap);
+		mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
 
 		// act
 		GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
@@ -122,11 +122,11 @@ class GiveMySecretClientImplTest {
 				.withKeystoreAlias(input.getKeystoreAlias())
 				.build();
 
-		MockedStatic<HttpClient> mockedConnectionUtils = mockStatic(HttpClient.class);
+		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
 		Map<String, String> mockMap = new HashMap<>();
 		mockMap.put(VALUE, input.getValue());
 		mockMap.put(TYPE, SIMPLE_CREDENTIAL);
-		mockedConnectionUtils.when(() -> HttpClient.getResponse(config, request)).thenReturn(mockMap);
+		mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
 
 		// act
 		GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
@@ -179,8 +179,8 @@ class GiveMySecretClientImplTest {
 			mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
 		}
 
-		MockedStatic<HttpClient> mockedConnectionUtils = mockStatic(HttpClient.class);
-		mockedConnectionUtils.when(() -> HttpClient.getResponse(config, request)).thenReturn(mockMap);
+		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
+		mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
 
 		// act
 		GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
@@ -217,7 +217,7 @@ class GiveMySecretClientImplTest {
 				// Failed execution with encrypted data
 				InputData.builder().withApiKey("apiKey").withSecretId("secretId").withKeystoreRequired(true).withType(KeystoreType.JKS)
 						
-						.withKeystoreAlias("test").withKeystoreCredential("test").withKeystoreAliasCredential("test").withValue("invalid").withExpectedMessage("Message cannot be decrypted!").build(),
+						.withKeystoreAlias("test").withKeystoreCredential("test").withKeystoreAliasCredential("test").withValue("invalid").withExpectedMessage("Decryption error").build(),
 				// Successful execution with encrypted data
 				InputData.builder().withApiKey("apiKey").withSecretId("secretId").withKeystoreRequired(true).withType(KeystoreType.JKS)
 						
