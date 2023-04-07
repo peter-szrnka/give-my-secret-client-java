@@ -12,6 +12,7 @@
 name: "CodeQL"
 
 on:
+  workflow_dispatch
   push:
     branches: [ "main" ]
     paths:
@@ -21,7 +22,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
   schedule:
-    - cron: '33 5 * * 2'
+    - cron: '0 10 * * 1-5'
 
 jobs:
   analyze:
