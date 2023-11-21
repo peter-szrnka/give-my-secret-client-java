@@ -7,18 +7,13 @@ import io.github.gms.client.model.GetSecretRequest;
 import io.github.gms.client.model.GiveMySecretClientConfig;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
 import java.util.Map;
 
 import static io.github.gms.client.util.Constants.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
 
 /**
  * Unit test of {@link ApiHttpClient}
@@ -41,13 +36,13 @@ class ApiHttpClientTest {
 		
 		// act
 		GiveMySecretClientConfig configuration = GiveMySecretClientConfig.builder()
-				.withUrl("https://localhost:9443")
-				.withDefaultConnectionTimeout(60000)
-				.withDefaultReadTimeout(60000)
-				.withDisableSslVerification(true)
-				.withMaxRetry(2)
+				.url("https://localhost:9443")
+				.defaultConnectionTimeout(60000)
+				.defaultReadTimeout(60000)
+				.disableSslVerification(true)
+				.maxRetry(2)
 				.build();
-		GetSecretRequest request = GetSecretRequest.builder().withApiKey("api-key").withSecretId("secret1").build();
+		GetSecretRequest request = GetSecretRequest.builder().apiKey("api-key").secretId("secret1").build();
 
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> ApiHttpClient.get(configuration, request));
 
@@ -67,13 +62,13 @@ class ApiHttpClientTest {
 
 		// act
 		GiveMySecretClientConfig configuration = GiveMySecretClientConfig.builder()
-				.withUrl("https://localhost:9443")
-				.withDefaultConnectionTimeout(60000)
-				.withDefaultReadTimeout(60000)
-				.withDisableSslVerification(false)
-				.withMaxRetry(2)
+				.url("https://localhost:9443")
+				.defaultConnectionTimeout(60000)
+				.defaultReadTimeout(60000)
+				.disableSslVerification(false)
+				.maxRetry(2)
 				.build();
-		GetSecretRequest request = GetSecretRequest.builder().withApiKey("api-key").withSecretId("secret1").build();
+		GetSecretRequest request = GetSecretRequest.builder().apiKey("api-key").secretId("secret1").build();
 
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> ApiHttpClient.get(configuration, request));
 
@@ -124,12 +119,12 @@ class ApiHttpClientTest {
 
 		// act
 		GiveMySecretClientConfig configuration = GiveMySecretClientConfig.builder()
-				.withUrl("https://localhost:9443")
-				.withDefaultConnectionTimeout(60000)
-				.withDefaultReadTimeout(60000)
-				.withDisableSslVerification(true)
+				.url("https://localhost:9443")
+				.defaultConnectionTimeout(60000)
+				.defaultReadTimeout(60000)
+				.disableSslVerification(true)
 				.build();
-		GetSecretRequest request = GetSecretRequest.builder().withApiKey("api-key").withSecretId("secret1").build();
+		GetSecretRequest request = GetSecretRequest.builder().apiKey("api-key").secretId("secret1").build();
 
 		Map<String, String> response = ApiHttpClient.get(configuration, request);
 		assertNotNull(response);

@@ -13,19 +13,19 @@ public class EncryptedJksExampleCall {
 
     public static void main(String[] args) throws Exception {
         GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
-                .withUrl("https://localhost:8443")
+                .url("https://localhost:8443")
                 .build();
 
         GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
 
         Map<String, String> response = client.getSecret(GetSecretRequest.builder()
-                        .withKeystore(new FileInputStream(new File("src/test/resources/test.jks")))
-                        .withKeystoreType(KeystoreType.JKS)
-                        .withKeystoreCredential("test")
-                        .withKeystoreAliasCredential("test")
-                        .withKeystoreAlias("test")
-                        .withApiKey("<api_key>")
-                        .withSecretId("<secret_id>")
+                        .keystore(new FileInputStream(new File("src/test/resources/test.jks")))
+                        .keystoreType(KeystoreType.JKS)
+                        .keystoreCredential("test")
+                        .keystoreAliasCredential("test")
+                        .keystoreAlias("test")
+                        .apiKey("<api_key>")
+                        .secretId("<secret_id>")
                 .build());
 
         System.out.println("response = " + response.toString());
