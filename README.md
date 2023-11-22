@@ -1,9 +1,5 @@
 # give-my-secret-client-java
-Java client library for Give My Secret credential storage application.
-
-> **Warning**
-> **This repository is no longer maintained, to connect to your Give My Secret server, please use the sample codes that you can find here:**
-> https://github.com/peter-szrnka/give-my-secret/tree/main/client-samples
+Java client library for Give My Secret credential storage application. Currently it's under development, the first version will be released soon!
 
 
 | Code QL                                                      | Code coverage                                                | Sonarcloud                                                   |
