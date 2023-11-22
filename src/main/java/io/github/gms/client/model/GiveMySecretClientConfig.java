@@ -56,22 +56,22 @@ public class GiveMySecretClientConfig {
 		private Builder() {
 		}
 
-		public Builder withUrl(String url) {
+		public Builder url(String url) {
 			this.url = url;
 			return this;
 		}
 
-		public Builder withDisableSslVerification(boolean disableSslVerification) {
+		public Builder disableSslVerification(boolean disableSslVerification) {
 			this.disableSslVerification = disableSslVerification;
 			return this;
 		}
 
-		public Builder withDefaultConnectionTimeout(int defaultConnectionTimeout) {
+		public Builder defaultConnectionTimeout(int defaultConnectionTimeout) {
 			this.defaultConnectionTimeout = defaultConnectionTimeout;
 			return this;
 		}
 
-		public Builder withDefaultReadTimeout(int defaultReadTimeout) {
+		public Builder defaultReadTimeout(int defaultReadTimeout) {
 			this.defaultReadTimeout = defaultReadTimeout;
 			return this;
 		}
@@ -80,7 +80,7 @@ public class GiveMySecretClientConfig {
 			return new GiveMySecretClientConfig(this);
 		}
 
-		public Builder withMaxRetry(int maxRetry) {
+		public Builder maxRetry(int maxRetry) {
 			this.maxRetry = maxRetry;
 			return this;
 		}

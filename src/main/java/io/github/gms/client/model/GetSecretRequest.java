@@ -44,37 +44,37 @@ public class GetSecretRequest {
 		private Builder() {
 		}
 
-		public Builder withApiKey(String apiKey) {
+		public Builder apiKey(String apiKey) {
 			this.apiKey = apiKey;
 			return this;
 		}
 
-		public Builder withSecretId(String secretId) {
+		public Builder secretId(String secretId) {
 			this.secretId = secretId;
 			return this;
 		}
 
-		public Builder withKeystore(InputStream keystore) {
+		public Builder keystore(InputStream keystore) {
 			this.keystore = keystore;
 			return this;
 		}
 
-		public Builder withKeystoreType(KeystoreType keystoreType) {
+		public Builder keystoreType(KeystoreType keystoreType) {
 			this.keystoreType = keystoreType;
 			return this;
 		}
 
-		public Builder withKeystoreCredential(String keystoreCredential) {
+		public Builder keystoreCredential(String keystoreCredential) {
 			this.keystoreCredential = keystoreCredential;
 			return this;
 		}
 
-		public Builder withKeystoreAlias(String keystoreAlias) {
+		public Builder keystoreAlias(String keystoreAlias) {
 			this.keystoreAlias = keystoreAlias;
 			return this;
 		}
 
-		public Builder withKeystoreAliasCredential(String keystoreAliasCredential) {
+		public Builder keystoreAliasCredential(String keystoreAliasCredential) {
 			this.keystoreAliasCredential = keystoreAliasCredential;
 			return this;
 		}

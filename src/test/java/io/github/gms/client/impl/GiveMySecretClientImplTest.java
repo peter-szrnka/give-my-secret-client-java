@@ -73,17 +73,17 @@ class GiveMySecretClientImplTest {
 	void shouldDecryptMultipleCredential() {
 		// arrange
 		GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
-				.withUrl("server:8080")
+				.url("server:8080")
 				.build();
 
 		GetSecretRequest request = GetSecretRequest.builder()
-				.withApiKey("api-key")
-				.withKeystoreType(KeystoreType.JKS)
-				.withKeystore(jksKeystoreStream)
-				.withSecretId("secret")
-				.withKeystoreAliasCredential("test")
-				.withKeystoreCredential("test")
-				.withKeystoreAlias("test")
+				.apiKey("api-key")
+				.keystoreType(KeystoreType.JKS)
+				.keystore(jksKeystoreStream)
+				.secretId("secret")
+				.keystoreAliasCredential("test")
+				.keystoreCredential("test")
+				.keystoreAlias("test")
 				.build();
 
 		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
@@ -109,17 +109,17 @@ class GiveMySecretClientImplTest {
 	void shouldTestWithJks(InputData input) {
 		// arrange
 		GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
-				.withUrl("server:8080")
+				.url("server:8080")
 				.build();
 
 		GetSecretRequest request = GetSecretRequest.builder()
-				.withApiKey(input.getApiKey())
-				.withKeystoreType(input.getType())
-				.withKeystore(input.isKeystoreRequired() ? jksKeystoreStream : null)
-				.withSecretId(input.getSecretId())
-				.withKeystoreAliasCredential(input.getKeystoreAliasCredential())
-				.withKeystoreCredential(input.getKeystoreCredential())
-				.withKeystoreAlias(input.getKeystoreAlias())
+				.apiKey(input.getApiKey())
+				.keystoreType(input.getType())
+				.keystore(input.isKeystoreRequired() ? jksKeystoreStream : null)
+				.secretId(input.getSecretId())
+				.keystoreAliasCredential(input.getKeystoreAliasCredential())
+				.keystoreCredential(input.getKeystoreCredential())
+				.keystoreAlias(input.getKeystoreAlias())
 				.build();
 
 		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
@@ -157,17 +157,17 @@ class GiveMySecretClientImplTest {
 	void shouldTestWithP12(boolean returnDecrypted) {
 		// arrange
 		GiveMySecretClientConfig config = GiveMySecretClientConfig.builder()
-				.withUrl("http://localhost:8080")
+				.url("http://localhost:8080")
 				.build();
 
 		GetSecretRequest request = GetSecretRequest.builder()
-				.withApiKey("apiKey")
-				.withKeystoreType(KeystoreType.PKCS12)
-				.withKeystore(p12KeystoreStream)
-				.withSecretId("secret2")
-				.withKeystoreAliasCredential("test")
-				.withKeystoreCredential("test")
-				.withKeystoreAlias("test")
+				.apiKey("apiKey")
+				.keystoreType(KeystoreType.PKCS12)
+				.keystore(p12KeystoreStream)
+				.secretId("secret2")
+				.keystoreAliasCredential("test")
+				.keystoreCredential("test")
+				.keystoreAlias("test")
 				.build();
 
 		Map<String, String> mockMap = new HashMap<>();

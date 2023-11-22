@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<bouncycastle.version>1.67</bouncycastle.version>
+		<bouncycastle.version>1.77</bouncycastle.version>
 		<jackson-databind.version>2.14.0</jackson-databind.version>
 
 		<junit.jupiter.version>5.8.2</junit.jupiter.version>
@@ -92,9 +92,10 @@
 		<!-- Bouncy Castle -->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
+			<artifactId>bcprov-jdk18on</artifactId>
 			<version>${bouncycastle.version}</version>
 		</dependency>
+
 
 		<!-- Testing -->
 		<dependency>
@@ -146,9 +147,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.tomakehurst</groupId>
-			<artifactId>wiremock-jre8</artifactId>
-			<version>2.35.0</version>
+			<groupId>org.wiremock</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>3.3.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
