@@ -9,7 +9,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -65,8 +64,7 @@ public class ApiHttpClient {
         return OBJECT_MAPPER.readValue(response.body(), Map.class);
     }
 
-    private static HttpResponse<String> send(HttpClient httpClient, HttpRequest httpRequest, Map<String, Exception> exceptions)
-            throws IOException, InterruptedException {
+    private static HttpResponse<String> send(HttpClient httpClient, HttpRequest httpRequest, Map<String, Exception> exceptions) {
         try {
             return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
@@ -83,7 +81,7 @@ public class ApiHttpClient {
             SSLParameters sslParameters = new SSLParameters();
             sslParameters.setEndpointIdentificationAlgorithm("");
 
-            SSLContext sc = SSLContext.getInstance("TLSv1.2");
+            SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, trustAllCerts(), new java.security.SecureRandom());
 
             Properties props = System.getProperties();
