@@ -50,7 +50,7 @@ public class GiveMySecretClientConfig {
 		private String url;
 		private int defaultConnectionTimeout = 30000;
 		private int defaultReadTimeout = 30000;
-		private boolean disableSslVerification;
+		private boolean disableSslVerification = true;
 		private int maxRetry = 3;
 
 		private Builder() {
