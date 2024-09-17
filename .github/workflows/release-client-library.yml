@@ -44,15 +44,9 @@ jobs:
 #                git config --global user.name ${{ secrets.GH_USERNAME }}
 #                git config --global user.email ${{ secrets.GH_EMAIL }}
 #                git commit -am "[ci-skip] Version updated to ${{ github.event.inputs.releaseVersion }}"
-      - name: Inject Maven Settings
-          run: | 
-            echo '<settings>
-            <servers>
-                <server>
-                  <id>internal-repo</id>
-                  <username>'"${{ secrets.MAVEN_USERNAME }}"'</username>
-                  <password>'"${{ secrets.MAVEN_PASSWORD }}"'</password>
-                </server></servers></settings>' > $HOME/.m2/settings.xml
+      - uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: '[{"id": "central-sonatype", "username": "${sonatype.username}", "password": "${sonatype.password}"}]'
       - name: Build and deploy
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
