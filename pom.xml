@@ -200,14 +200,6 @@
         </plugins>
     </build>
 
-    <servers>
-        <server>
-            <id>central-sonatype</id>
-            <username>${sonatype.username}</username>
-            <password>${sonatype.password}</password>
-        </server>
-    </servers>
-
     <profiles>
         <profile>
             <id>central-release</id>
