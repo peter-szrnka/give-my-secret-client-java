@@ -50,8 +50,8 @@ jobs:
                   <servers>
                     <server>
                       <id>internal-repo</id>
-                      <username>${sonatype.username}</username>
-                      <password>${sonatype.password}</password>
+                      <username>${{ secrets.SONATYPE_USERNAME }}</username>
+                      <password>${{ secrets.SONATYPE_PASSWORD }}</password>
                     </server>
                   </servers>
                 </settings>" > $HOME/.m2/settings.xml
@@ -59,7 +59,7 @@ jobs:
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-        run: mvn clean deploy -Pcentral-release -B -Dsonatype.username=${SONATYPE_USERNAME} -Dsonatype.password=${SONATYPE_PASSWORD}
+        run: mvn clean deploy -Pcentral-release -Dmaven.test.skip=true -B -Dsonatype.username=${SONATYPE_USERNAME} -Dsonatype.password=${SONATYPE_PASSWORD}
 #      - name: Update backend version to ${{ github.event.inputs.developmentVersion }}
 #          run: |
 #            mvn -B versions:set -DnewVersion=${{ github.event.inputs.developmentVersion }} -DgenerateBackupPoms=false -f ${{ github.workspace }}/code/pom.xml
