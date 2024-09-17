@@ -16,31 +16,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: github.event.head_commit.message != 'Version update'
+        if: "!contains(github.event.head_commit.message, 'ci-skip')"
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 11
-        if: github.event.head_commit.message != 'Version update'
+        if: "!contains(github.event.head_commit.message, 'ci-skip')"
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Cache SonarCloud packages
-        if: github.event.head_commit.message != 'Version update'
+        if: "!contains(github.event.head_commit.message, 'ci-skip')"
         uses: actions/cache@v1
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Cache Maven packages
-        if: github.event.head_commit.message != 'Version update'
+        if: "!contains(github.event.head_commit.message, 'ci-skip')"
         uses: actions/cache@v1
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Sonarcloud scan
-        if: github.event.head_commit.message != 'Version update'
+        if: "!contains(github.event.head_commit.message, 'ci-skip')"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
