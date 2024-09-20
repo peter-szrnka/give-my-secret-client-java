@@ -1,0 +1,64 @@
+name: Release Java client library
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: "Default version to use when preparing a release."
+        required: true
+        default: "X.Y.Z"
+      developmentVersion:
+        description: "Default version to use for new local working copy."
+        required: true
+        default: "X.Y.Z-SNAPSHOT"
+jobs:
+  release_client_library:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+#      - name: Update pom.xml to releaseVersion
+#          run: |
+#            mvn -B versions:set -DnewVersion=${{ github.event.inputs.releaseVersion }} -DgenerateBackupPoms=false -f ./pom.xml
+#            - name: Commit version change
+#              run: |
+#                git config --global user.name ${{ secrets.GH_USERNAME }}
+#                git config --global user.email ${{ secrets.GH_EMAIL }}
+#                git commit -am "[ci-skip] Version updated to ${{ github.event.inputs.releaseVersion }}"
+      - name: Build and deploy
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: mvn clean deploy -Pcentral-release -Dmaven.test.skip=true -B -Dsonatype.username=${SONATYPE_USERNAME} -Dsonatype.password=${SONATYPE_PASSWORD}
+#      - name: Update backend version to ${{ github.event.inputs.developmentVersion }}
+#          run: |
+#            mvn -B versions:set -DnewVersion=${{ github.event.inputs.developmentVersion }} -DgenerateBackupPoms=false -f ${{ github.workspace }}/code/pom.xml
+#            - name: Update frontend version to ${{ github.event.inputs.developmentVersion }}
+#              working-directory: ./code/gms-frontend
+#              run: |
+#                npm version ${{github.event.inputs.developmentVersion}}
+#            - name: Commit version change
+#              run: |
+#                git config --global user.name ${{ secrets.GH_USERNAME }}
+#                git config --global user.email ${{ secrets.GH_EMAIL }}
+#                git commit -am "[ci-skip] Version updated to ${{ github.event.inputs.developmentVersion }}"
+#                git push
