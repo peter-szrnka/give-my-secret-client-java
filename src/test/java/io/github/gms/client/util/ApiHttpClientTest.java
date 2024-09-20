@@ -47,7 +47,7 @@ class ApiHttpClientTest {
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> ApiHttpClient.get(configuration, request));
 
 		assertNotNull(exception);
-		assertEquals("Request failed after 2 retries! Error(s): Invalid chunk header byte 108", exception.getMessage());
+		assertEquals("Request failed after 2 retries! Error(s): Illegal character in chunk size: 108", exception.getMessage());
 	}
 
 	@Test
