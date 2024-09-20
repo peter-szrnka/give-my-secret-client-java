@@ -11,54 +11,52 @@ on:
         description: "Default version to use for new local working copy."
         required: true
         default: "X.Y.Z-SNAPSHOT"
+permissions:
+  contents: write
 jobs:
-  release_client_library:
-    name: Build and deploy
+  publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+          token: ${{ secrets.PAT }}
+          ref: main
+        env:
+          branch: main
+      - id: install-secret-key 
+        name: Install gpg secret key 
+        run: | 
+          # Install gpg secret key 
+          cat <(echo -e "${{ secrets.GPG_SIGNING_KEY }}") | gpg --batch --import 
+          # Verify gpg secret key 
+          gpg --list-secret-keys --keyid-format LONG
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'adopt'
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-#      - name: Update pom.xml to releaseVersion
-#          run: |
-#            mvn -B versions:set -DnewVersion=${{ github.event.inputs.releaseVersion }} -DgenerateBackupPoms=false -f ./pom.xml
-#            - name: Commit version change
-#              run: |
-#                git config --global user.name ${{ secrets.GH_USERNAME }}
-#                git config --global user.email ${{ secrets.GH_EMAIL }}
-#                git commit -am "[ci-skip] Version updated to ${{ github.event.inputs.releaseVersion }}"
-      - name: Build and deploy
+          distribution: 'temurin'
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+      - name: Update pom.xml to releaseVersion
+        run: mvn -B versions:set -DnewVersion=${{ github.event.inputs.releaseVersion }} -DgenerateBackupPoms=false -f ./pom.xml
+      - name: Commit version change
+        run: |
+          git config --global user.name ${{ secrets.GH_USERNAME }}
+          git config --global user.email ${{ secrets.GH_EMAIL }}
+          git commit -am "Version updated to ${{ github.event.inputs.releaseVersion }}"
+      - name: Publish package
+        run: mvn -Prelease --batch-mode -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} deploy -f ./code/pom.xml
         env:
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-        run: mvn clean deploy -Pcentral-release -Dmaven.test.skip=true -B -Dsonatype.username=${SONATYPE_USERNAME} -Dsonatype.password=${SONATYPE_PASSWORD}
-#      - name: Update backend version to ${{ github.event.inputs.developmentVersion }}
-#          run: |
-#            mvn -B versions:set -DnewVersion=${{ github.event.inputs.developmentVersion }} -DgenerateBackupPoms=false -f ${{ github.workspace }}/code/pom.xml
-#            - name: Update frontend version to ${{ github.event.inputs.developmentVersion }}
-#              working-directory: ./code/gms-frontend
-#              run: |
-#                npm version ${{github.event.inputs.developmentVersion}}
-#            - name: Commit version change
-#              run: |
-#                git config --global user.name ${{ secrets.GH_USERNAME }}
-#                git config --global user.email ${{ secrets.GH_EMAIL }}
-#                git commit -am "[ci-skip] Version updated to ${{ github.event.inputs.developmentVersion }}"
-#                git push
+          MAVEN_USERNAME:  ${{ secrets.SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Update pom.xml to developmentVersion
+        run: mvn -B versions:set -DnewVersion=${{ github.event.inputs.developmentVersion }} -DgenerateBackupPoms=false -f ./pom.xml
+      - name: Commit version change to next SNAPSHOT version
+        run: |
+          git config --global user.name ${{ secrets.GH_USERNAME }}
+          git config --global user.email ${{ secrets.GH_EMAIL }}
+          git commit -am "Version updated to ${{ github.event.inputs.developmentVersion }}"
+          git pushs.developmentVersion }}"
+          git push
