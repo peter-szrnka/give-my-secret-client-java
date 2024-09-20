@@ -14,10 +14,10 @@ public interface GiveMySecretClient {
 
 	/**
 	 * Returns with a secret by the provided input
-	 * @param request
-	 * @return GetSecretResponse Response object
-	 * 
-	 * @throws Exception
-	 */
+	 * @param request A prepared {@link GetSecretRequest} object
+	 * @return {@link Map} Response object
+	 *
+	 * @throws Exception If any error occurs an error will be thrown
+     */
 	Map<String, String> getSecret(GetSecretRequest request) throws Exception;
 }

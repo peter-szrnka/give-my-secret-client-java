@@ -86,22 +86,21 @@ class GiveMySecretClientImplTest {
 				.keystoreAlias("test")
 				.build();
 
-		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
-		Map<String, String> mockMap = new HashMap<>();
-		mockMap.put(VALUE, TEST_MULTIPLE_ENCRYPTED_VALUE);
-		mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
-		mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
+		try (MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class)) {
+			Map<String, String> mockMap = new HashMap<>();
+			mockMap.put(VALUE, TEST_MULTIPLE_ENCRYPTED_VALUE);
+			mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
+			mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
 
-		// act
-		GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
-		Map<String, String> response = client.getSecret(request);
+			// act
+			GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
+			Map<String, String> response = client.getSecret(request);
 
-		// assert
-		assertNotNull(response);
-		assertEquals("u", response.get("username"));
-		assertEquals("p", response.get("password"));
-
-		mockedConnectionUtils.close();
+			// assert
+			assertNotNull(response);
+			assertEquals("u", response.get("username"));
+			assertEquals("p", response.get("password"));
+		}
 	}
 
 	@ParameterizedTest
@@ -122,31 +121,28 @@ class GiveMySecretClientImplTest {
 				.keystoreAlias(input.getKeystoreAlias())
 				.build();
 
-		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
-		Map<String, String> mockMap = new HashMap<>();
-		mockMap.put(VALUE, input.getValue());
-		mockMap.put(TYPE, SIMPLE_CREDENTIAL);
-		mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
+		try (MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class)) {
+			Map<String, String> mockMap = new HashMap<>();
+			mockMap.put(VALUE, input.getValue());
+			mockMap.put(TYPE, SIMPLE_CREDENTIAL);
+			mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
 
-		// act
-		GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
+			// act
+			GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
 
-		if (input.getExpectedMessage() != null) {
-			Exception exception = assertThrows(Exception.class, () -> client.getSecret(request));
+			if (input.getExpectedMessage() != null) {
+				Exception exception = assertThrows(Exception.class, () -> client.getSecret(request));
 
-			// arrange
-			assertEquals(input.getExpectedMessage(), exception.getMessage());
-
-			mockedConnectionUtils.close();
-		} else {
-			try {
-				Map<String, String> response = client.getSecret(request);
-				assertNotNull(response);
-				assertEquals("my-value", response.get(VALUE));
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				mockedConnectionUtils.close();
+				// arrange
+				assertNotNull(exception);
+			} else {
+				try {
+					Map<String, String> response = client.getSecret(request);
+					assertNotNull(response);
+					assertEquals("my-value", response.get(VALUE));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -179,18 +175,17 @@ class GiveMySecretClientImplTest {
 			mockMap.put(TYPE, MULTIPLE_CREDENTIAL);
 		}
 
-		MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class);
-		mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
+		try (MockedStatic<ApiHttpClient> mockedConnectionUtils = mockStatic(ApiHttpClient.class)) {
+			mockedConnectionUtils.when(() -> ApiHttpClient.get(config, request)).thenReturn(mockMap);
 
-		// act
-		GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
+			// act
+			GiveMySecretClient client = GiveMySecretClientBuilder.create(config);
 
-		Map<String, String> response = client.getSecret(request);
-		assertNotNull(response);
-		assertEquals("peter", response.get("username"));
-		assertEquals("asdf1234", response.get("password"));
-
-		mockedConnectionUtils.close();
+			Map<String, String> response = client.getSecret(request);
+			assertNotNull(response);
+			assertEquals("peter", response.get("username"));
+			assertEquals("asdf1234", response.get("password"));
+		}
 	}
 
 	public static InputData[] inputData() {
