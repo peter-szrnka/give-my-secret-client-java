@@ -46,7 +46,7 @@ jobs:
           git config --global user.email ${{ secrets.GH_EMAIL }}
           git commit -am "Version updated to ${{ github.event.inputs.releaseVersion }}"
       - name: Publish package
-        run: mvn -Prelease --batch-mode -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} deploy -f ./code/pom.xml
+        run: mvn -Prelease --batch-mode -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} deploy -f ./pom.xml
         env:
           MAVEN_USERNAME:  ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
