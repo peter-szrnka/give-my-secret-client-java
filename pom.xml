@@ -6,6 +6,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Give My Secret Java client</name>
 
+    <description>Java client for Give My Secret credential manager application</description>
     <url>https://github.com/peter-szrnka/give-my-secret-client-java</url>
 
     <properties>
