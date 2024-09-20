@@ -76,37 +76,6 @@ class ApiHttpClientTest {
 		assertEquals("Request failed after 2 retries! Error(s): PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target", exception.getMessage());
 	}
 
-	/*@Test
-	@SneakyThrows
-	void shouldFail() {
-		// arrange
-		WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/secret/secret1"))
-				.willReturn(WireMock.aResponse()
-						.withHeader("Content-Type", "application/json")
-						.withStatus(200)
-						.withBody("{ \"value\" : \"my-value\"}")));
-
-		MockedStatic<SSLContext> sslContextMockedStatic = mockStatic(SSLContext.class);
-		sslContextMockedStatic.when(() -> SSLContext.getInstance(anyString())).thenThrow(new IOException("Oops!"));
-
-		// act
-		GiveMySecretClientConfig configuration = GiveMySecretClientConfig.builder()
-				.withUrl("https://localhost:9443")
-				.withDefaultConnectionTimeout(60000)
-				.withDefaultReadTimeout(60000)
-				.withDisableSslVerification(true)
-				.withMaxRetry(2)
-				.build();
-		GetSecretRequest request = GetSecretRequest.builder().withApiKey("api-key").withSecretId("secret1").build();
-
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> ApiHttpClient.get(configuration, request));
-
-		sslContextMockedStatic.close();
-
-		assertNotNull(exception);
-		assertEquals("Oops!", exception.getMessage());
-	}*/
-
 	@Test
 	@SneakyThrows
 	void shouldPass() {
