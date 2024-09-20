@@ -135,8 +135,7 @@ class GiveMySecretClientImplTest {
 
 				// arrange
 				assertNotNull(exception);
-				// FIXME
-				//assertEquals(input.getExpectedMessage(), exception.getMessage());
+				assertEquals(input.getExpectedMessage(), exception.getMessage());
 			} else {
 				try {
 					Map<String, String> response = client.getSecret(request);
