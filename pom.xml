@@ -281,8 +281,6 @@
 										<arg>--pinentry-mode</arg>
 										<arg>loopback</arg>
 									</gpgArguments>
-                                    <keyname>${gpg.keyname}</keyname>
-                                    <passphrase>${gpg.passphrase}</passphrase>
 								</configuration>
 							</execution>
 						</executions>
@@ -294,8 +292,6 @@
 						<extensions>true</extensions>
 						<configuration>
 							<publishingServerId>central</publishingServerId>
-                            <gpgPassphrase>${gpg.passphrase}</gpgPassphrase>
-                            <gpgKeyname>${gpg.keyname}</gpgKeyname>
 						</configuration>
 					</plugin>
 				</plugins>
