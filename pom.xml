@@ -50,17 +50,6 @@
         <developerConnection>scm:git:ssh://git@github.com/peter-szrnka/give-my-secret-client-java.git</developerConnection>
     </scm>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <licenses>
         <license>
             <name>GPL License</name>
@@ -242,6 +231,7 @@
 						<executions>
 							<execution>
 								<id>attach-sources</id>
+                                <phase>package</phase>
 								<goals>
 									<goal>jar-no-fork</goal>
 								</goals>
@@ -272,7 +262,7 @@
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
-								<phase>verify</phase>
+                                <phase>package</phase>
 								<goals>
 									<goal>sign</goal>
 								</goals>
