@@ -47,8 +47,7 @@
     <scm>
         <url>https://github.com/peter-szrnka/give-my-secret-client-java</url>
         <connection>scm:git:ssh://git@github.com/peter-szrnka/give-my-secret-client-java.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/peter-szrnka/give-my-secret-client-java.git
-        </developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/peter-szrnka/give-my-secret-client-java.git</developerConnection>
     </scm>
 
     <distributionManagement>
@@ -282,6 +281,8 @@
 										<arg>--pinentry-mode</arg>
 										<arg>loopback</arg>
 									</gpgArguments>
+                                    <keyname>${gpg.keyname}</keyname>
+                                    <passphrase>${gpg.passphrase}</passphrase>
 								</configuration>
 							</execution>
 						</executions>
