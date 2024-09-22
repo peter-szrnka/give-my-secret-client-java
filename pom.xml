@@ -294,6 +294,8 @@
 						<extensions>true</extensions>
 						<configuration>
 							<publishingServerId>central</publishingServerId>
+                            <gpgPassphrase>${gpg.passphrase}</gpgPassphrase>
+                            <gpgKeyname>${gpg.keyname}</gpgKeyname>
 						</configuration>
 					</plugin>
 				</plugins>
