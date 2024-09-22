@@ -51,6 +51,8 @@ jobs:
           MAVEN_USERNAME:  ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Echo passphrase
+        run: echo `${{ secrets.GPG_PASSPHRASE }}`
       - name: Update pom.xml to developmentVersion
         run: mvn -B versions:set -DnewVersion=${{ github.event.inputs.developmentVersion }} -DgenerateBackupPoms=false -f ./pom.xml
       - name: Commit version change to next SNAPSHOT version
@@ -58,5 +60,4 @@ jobs:
           git config --global user.name ${{ secrets.GH_USERNAME }}
           git config --global user.email ${{ secrets.GH_EMAIL }}
           git commit -am "Version updated to ${{ github.event.inputs.developmentVersion }}"
-          git pushs.developmentVersion }}"
           git push
