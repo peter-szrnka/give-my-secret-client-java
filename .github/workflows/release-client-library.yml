@@ -45,8 +45,6 @@ jobs:
           git config --global user.name ${{ secrets.GH_USERNAME }}
           git config --global user.email ${{ secrets.GH_EMAIL }}
           git commit -am "Version updated to ${{ github.event.inputs.releaseVersion }}"
-      - name: Echo passphrase
-        run: echo `${{ secrets.GPG_PASSPHRASE }}`
       - name: Publish package
         run: mvn -Prelease --batch-mode -Dgpg.keyname=${{ secrets.GPG_KEY }} -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} deploy -f ./pom.xml
         env:
