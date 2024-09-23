@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.peter-szrnka</groupId>
     <artifactId>give-my-secret-client-java</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>Give My Secret Java client</name>
 
     <description>Java client for Give My Secret credential manager application</description>
