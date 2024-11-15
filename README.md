@@ -8,11 +8,11 @@ Official Java client library for [**Give My Secret**](https://github.com/peter-s
 To use the official Java client you have to add the library artifact to your Maven pom.xml:
 
 ```
-<parent>
+    <dependency>
         <groupId>io.github.peter-szrnka</groupId>
         <artifactId>give-my-secret-client-java</artifactId>
         <version>1.0.0</version>
-    </parent>
+    </dependency>
 ```
 
 ## Code sample
