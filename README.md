@@ -32,6 +32,8 @@ public class MavenClientLibraryExample {
 	public static void main(String[] args) throws Exception {
 		GiveMySecretClient client = GiveMySecretClientBuilder.create(GiveMySecretClientConfig.builder()
 				.url(getInstanceUrl())
+				.maxRetry(2)
+				.retryDelay(2000)
 				.build());
 
 		Map<String, String> response = client.getSecret(GetSecretRequest.builder()

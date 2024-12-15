@@ -51,6 +51,8 @@ public class ApiHttpClient {
         while ((response = send(httpClient, httpRequest, exceptions)) == null) {
             retry++;
 
+            delay(configuration.getRetryDelay());
+
             if (retry == configuration.getMaxRetry()) {
                 break;
             }
@@ -62,6 +64,13 @@ public class ApiHttpClient {
         }
 
         return OBJECT_MAPPER.readValue(response.body(), Map.class);
+    }
+
+    private static void delay(int retryDelay) {
+        try {
+            Thread.sleep(retryDelay);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     private static HttpResponse<String> send(HttpClient httpClient, HttpRequest httpRequest, Map<String, Exception> exceptions) {

@@ -13,6 +13,7 @@ public class GiveMySecretClientConfig {
 	private final int defaultReadTimeout;
 	private final boolean disableSslVerification;
 	private final int maxRetry;
+	private final int retryDelay;
 
 	private GiveMySecretClientConfig(Builder builder) {
 		this.url = builder.url;
@@ -20,6 +21,7 @@ public class GiveMySecretClientConfig {
 		this.defaultReadTimeout = builder.defaultReadTimeout;
 		this.disableSslVerification = builder.disableSslVerification;
 		this.maxRetry = builder.maxRetry;
+		this.retryDelay = builder.retryDelay;
 	}
 
 	public String getUrl() {
@@ -42,6 +44,10 @@ public class GiveMySecretClientConfig {
 		return maxRetry;
 	}
 
+	public int getRetryDelay() {
+		return retryDelay;
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -52,6 +58,7 @@ public class GiveMySecretClientConfig {
 		private int defaultReadTimeout = 30000;
 		private boolean disableSslVerification = true;
 		private int maxRetry = 3;
+		private int retryDelay = 1000;
 
 		private Builder() {
 		}
@@ -82,6 +89,11 @@ public class GiveMySecretClientConfig {
 
 		public Builder maxRetry(int maxRetry) {
 			this.maxRetry = maxRetry;
+			return this;
+		}
+
+		public Builder retryDelay(int retryDelay) {
+			this.retryDelay = retryDelay;
 			return this;
 		}
 	}
