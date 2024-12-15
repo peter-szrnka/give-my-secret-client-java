@@ -5,15 +5,12 @@ import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import io.github.gms.client.model.GetSecretRequest;
 import io.github.gms.client.model.GiveMySecretClientConfig;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
 import static io.github.gms.client.util.Constants.VALUE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test of {@link ApiHttpClient}
@@ -25,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ApiHttpClientTest {
 
     @Test
-    @SneakyThrows
     void shouldThrowRuntimeException() {
         // arrange
         WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/secret/secret1"))
@@ -53,7 +49,6 @@ class ApiHttpClientTest {
     }
 
     @Test
-    @SneakyThrows
     void shouldFailedBySslVerification() {
         // arrange
         WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/secret/secret1"))
@@ -79,8 +74,7 @@ class ApiHttpClientTest {
     }
 
     @Test
-    @SneakyThrows
-    void shouldPass() {
+    void shouldPass() throws Exception {
         // arrange
         WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/secret/secret1"))
                 .willReturn(WireMock.aResponse()

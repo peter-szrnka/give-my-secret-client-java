@@ -69,7 +69,8 @@ public class ApiHttpClient {
     private static void delay(int retryDelay) {
         try {
             Thread.sleep(retryDelay);
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
