@@ -5,13 +5,13 @@ import io.github.gms.client.model.GetSecretRequest;
 import io.github.gms.client.model.GiveMySecretClientConfig;
 import io.github.gms.client.util.ApiHttpClient;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.HashMap;
@@ -19,9 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.github.gms.client.util.Constants.SIMPLE_CREDENTIAL;
-import static io.github.gms.client.util.Constants.TYPE;
-import static io.github.gms.client.util.Constants.VALUE;
+import static io.github.gms.client.util.Constants.*;
 
 /**
  * Default implementation for client.
@@ -43,7 +41,7 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
     }
 
     @Override
-    public Map<String, String> getSecret(GetSecretRequest request) throws Exception {
+    public Map<String, String> getSecret(GetSecretRequest request) throws NoSuchAlgorithmException, IOException, KeyManagementException, UnrecoverableKeyException, NoSuchPaddingException, IllegalBlockSizeException, CertificateException, KeyStoreException, BadPaddingException, InvalidKeyException {
         validateRequest(request);
 
         Map<String, String> httpResponse = ApiHttpClient.get(configuration, request);
@@ -62,7 +60,9 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
         return decryptWithKeystore(request, httpResponse, type);
     }
 
-    private Map<String, String> decryptWithKeystore(GetSecretRequest request, Map<String, String> response, String type) throws Exception {
+    private Map<String, String> decryptWithKeystore(GetSecretRequest request, Map<String, String> response, String type)
+            throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException,
+            UnrecoverableKeyException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         validateKeystore(request);
 
         KeyStore ks;

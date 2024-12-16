@@ -1,5 +1,6 @@
 package io.github.gms.client.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.gms.client.model.GetSecretRequest;
@@ -39,7 +40,8 @@ public class ApiHttpClient {
     private ApiHttpClient() {
     }
 
-    public static Map<String, String> get(GiveMySecretClientConfig configuration, GetSecretRequest request) throws Exception {
+    public static Map<String, String> get(GiveMySecretClientConfig configuration, GetSecretRequest request)
+            throws NoSuchAlgorithmException, KeyManagementException, JsonProcessingException {
         HttpClient httpClient = initHttpClient(configuration);
         HttpRequest httpRequest = initHttpRequest(configuration, request);
 

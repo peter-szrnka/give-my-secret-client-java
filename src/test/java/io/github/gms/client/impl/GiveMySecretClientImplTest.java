@@ -20,13 +20,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.github.gms.client.util.Constants.MULTIPLE_CREDENTIAL;
-import static io.github.gms.client.util.Constants.SIMPLE_CREDENTIAL;
-import static io.github.gms.client.util.Constants.TYPE;
-import static io.github.gms.client.util.Constants.VALUE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static io.github.gms.client.util.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 
 /**

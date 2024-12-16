@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static io.github.gms.client.util.Constants.VALUE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test of {@link ApiHttpClient}
