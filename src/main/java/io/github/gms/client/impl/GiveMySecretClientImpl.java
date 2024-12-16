@@ -41,7 +41,10 @@ public class GiveMySecretClientImpl implements GiveMySecretClient {
     }
 
     @Override
-    public Map<String, String> getSecret(GetSecretRequest request) throws NoSuchAlgorithmException, IOException, KeyManagementException, UnrecoverableKeyException, NoSuchPaddingException, IllegalBlockSizeException, CertificateException, KeyStoreException, BadPaddingException, InvalidKeyException {
+    public Map<String, String> getSecret(GetSecretRequest request) throws
+            NoSuchAlgorithmException, IOException, KeyManagementException,
+            UnrecoverableKeyException, NoSuchPaddingException, IllegalBlockSizeException, CertificateException,
+            KeyStoreException, BadPaddingException, InvalidKeyException {
         validateRequest(request);
 
         Map<String, String> httpResponse = ApiHttpClient.get(configuration, request);
