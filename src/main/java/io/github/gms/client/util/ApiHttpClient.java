@@ -30,6 +30,11 @@ import java.util.Properties;
  */
 public class ApiHttpClient {
 
+    @FunctionalInterface
+    interface SleepFunction {
+        void sleep() throws InterruptedException;
+    }
+
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -51,7 +56,7 @@ public class ApiHttpClient {
         while ((response = send(httpClient, httpRequest, exceptions)) == null) {
             retry++;
 
-            delay(configuration.getRetryDelay());
+            delay(() -> Thread.sleep(configuration.getRetryDelay()));
 
             if (retry == configuration.getMaxRetry()) {
                 break;
@@ -66,9 +71,9 @@ public class ApiHttpClient {
         return OBJECT_MAPPER.readValue(response.body(), Map.class);
     }
 
-    private static void delay(int retryDelay) {
+    static void delay(SleepFunction sleepFunction) {
         try {
-            Thread.sleep(retryDelay);
+            sleepFunction.sleep();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

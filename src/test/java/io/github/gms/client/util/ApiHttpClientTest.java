@@ -49,7 +49,7 @@ class ApiHttpClientTest {
     }
 
     @Test
-    void shouldFailedBySslVerification() {
+    void get_whenSslVerificationFailed_thenThrowException() {
         // arrange
         WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/secret/secret1"))
                 .willReturn(WireMock.aResponse()
@@ -74,7 +74,7 @@ class ApiHttpClientTest {
     }
 
     @Test
-    void shouldPass() throws Exception {
+    void get_whenHttpCallCompleted_thenReturnResponse() throws Exception {
         // arrange
         WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/api/secret/secret1"))
                 .willReturn(WireMock.aResponse()
@@ -94,5 +94,19 @@ class ApiHttpClientTest {
         Map<String, String> response = ApiHttpClient.get(configuration, request);
         assertNotNull(response);
         assertEquals("my-value", response.get(VALUE));
+    }
+
+    @Test
+    void delay_whenSleepFunctionThrowsInterruptedException_thenThreadInterrupted() {
+        // arrange
+        ApiHttpClient.SleepFunction sleepFunction = () -> {
+            throw new InterruptedException();
+        };
+
+        // act
+        ApiHttpClient.delay(sleepFunction);
+
+        // assert
+        assertTrue(Thread.currentThread().isInterrupted());
     }
 }
